@@ -1,0 +1,580 @@
+/* ============================================================
+   SPACE INVADERS — STYLE.CSS
+   Arcade rétro-futuriste theme
+   ============================================================ */
+
+/* ---- CSS Variables ---- */
+:root {
+  --bg-dark:     #0a0e27;
+  --bg-mid:      #1a1f4a;
+  --cyan:        #00ffff;
+  --cyan-dim:    #00d4ff;
+  --cyan-dark:   #004466;
+  --red:         #ff006e;
+  --orange:      #ff6b35;
+  --green:       #00ff88;
+  --purple:      #9d4edd;
+  --yellow:      #ffbe0b;
+  --white:       #ffffff;
+  --grey:        #4a4a6a;
+
+  --glow-cyan:   0 0 8px #00ffff, 0 0 20px #00ffff80, 0 0 40px #00ffff40;
+  --glow-red:    0 0 8px #ff006e, 0 0 20px #ff006e80;
+  --glow-yellow: 0 0 8px #ffbe0b, 0 0 20px #ffbe0b80;
+  --glow-green:  0 0 8px #00ff88, 0 0 20px #00ff8880;
+  --glow-purple: 0 0 8px #9d4edd, 0 0 20px #9d4edd80;
+
+  --font-arcade: 'Press Start 2P', monospace;
+  --font-mono:   'Courier New', monospace;
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: var(--white);
+  font-family: var(--font-arcade);
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ============================================================
+   SCREENS
+   ============================================================ */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-mid) 100%);
+}
+.screen.active { display: flex; }
+.overlay-screen {
+  background: rgba(10, 14, 39, 0.92);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+}
+
+/* ============================================================
+   SCANLINES
+   ============================================================ */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.12) 2px,
+    rgba(0,0,0,0.12) 4px
+  );
+}
+.scanlines-off .scanlines { display: none; }
+
+/* ============================================================
+   STARS BACKGROUND
+   ============================================================ */
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+}
+
+/* ============================================================
+   MENU SCREEN
+   ============================================================ */
+.menu-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 20px;
+}
+
+.logo-wrapper {
+  text-align: center;
+}
+
+.logo-subtitle {
+  font-size: 9px;
+  color: var(--yellow);
+  letter-spacing: 8px;
+  margin-bottom: 12px;
+  text-shadow: var(--glow-yellow);
+}
+
+.logo-title {
+  font-size: clamp(28px, 8vw, 56px);
+  line-height: 1.2;
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+  letter-spacing: 4px;
+  animation: pulse-title 2s ease-in-out infinite;
+}
+
+.logo-blink {
+  font-size: 8px;
+  color: var(--white);
+  letter-spacing: 3px;
+  margin-top: 16px;
+  animation: blink 1.2s step-end infinite;
+}
+
+.menu-best-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.menu-best-score .label {
+  font-size: 8px;
+  color: var(--grey);
+  letter-spacing: 4px;
+}
+.menu-best-score .value {
+  font-size: 22px;
+  color: var(--yellow);
+  text-shadow: var(--glow-yellow);
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.menu-controls-hint {
+  display: flex;
+  gap: 20px;
+  font-size: 7px;
+  color: var(--grey);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hint-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hint-key {
+  color: var(--cyan-dim);
+  border: 1px solid var(--cyan-dark);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  font-family: var(--font-arcade);
+  font-size: 11px;
+  padding: 14px 20px;
+  border: 2px solid;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all 0.1s;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-primary {
+  background: transparent;
+  border-color: var(--cyan);
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+  box-shadow: inset 0 0 10px rgba(0,255,255,0.1), var(--glow-cyan);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: var(--cyan);
+  color: var(--bg-dark);
+  box-shadow: var(--glow-cyan);
+  transform: scale(1.02);
+  text-shadow: none;
+}
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--grey);
+  color: var(--white);
+}
+.btn-secondary:hover, .btn-secondary:focus {
+  border-color: var(--purple);
+  color: var(--purple);
+  box-shadow: var(--glow-purple);
+}
+
+/* ============================================================
+   CANVAS & GAME SCREEN
+   ============================================================ */
+#screen-game {
+  display: none;
+  flex-direction: column;
+}
+#screen-game.active { display: flex; }
+
+#gameCanvas {
+  display: block;
+  flex: 1;
+  width: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ============================================================
+   HUD
+   ============================================================ */
+.hud {
+  width: 100%;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.5);
+  border-bottom: 1px solid rgba(0,255,255,0.15);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.hud-top {
+  justify-content: space-between;
+  border-top: none;
+}
+
+.hud-bottom {
+  justify-content: space-between;
+  border-bottom: none;
+  border-top: 1px solid rgba(0,255,255,0.15);
+}
+
+.hud-label {
+  font-size: 6px;
+  color: var(--grey);
+  letter-spacing: 3px;
+  margin-bottom: 3px;
+}
+
+.hud-value {
+  font-size: 14px;
+  color: var(--white);
+  letter-spacing: 2px;
+}
+
+.hud-left .hud-value  { color: var(--cyan); text-shadow: var(--glow-cyan); }
+.hud-right .hud-value { color: var(--yellow); text-shadow: var(--glow-yellow); }
+.hud-center-top { text-align: center; }
+
+/* Lives */
+.hud-lives {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 8px;
+}
+.life-icon {
+  color: var(--cyan);
+  font-size: 14px;
+  text-shadow: var(--glow-cyan);
+  transition: all 0.3s;
+}
+.life-icon.lost {
+  color: var(--grey);
+  text-shadow: none;
+  opacity: 0.3;
+}
+
+/* Power-up HUD */
+.hud-powerup {
+  font-size: 7px;
+  color: var(--yellow);
+  text-shadow: var(--glow-yellow);
+  text-align: center;
+  min-width: 120px;
+  letter-spacing: 1px;
+}
+
+/* Combo HUD */
+.hud-combo {
+  font-size: 10px;
+  color: var(--orange);
+  text-align: right;
+  min-width: 80px;
+  text-shadow: 0 0 10px var(--orange);
+}
+
+/* ============================================================
+   PAUSE BUTTON
+   ============================================================ */
+.btn-pause {
+  position: absolute;
+  top: 48px;
+  right: 12px;
+  background: transparent;
+  border: 1px solid var(--grey);
+  color: var(--grey);
+  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 50;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-pause:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ============================================================
+   SCORE POPUPS
+   ============================================================ */
+#score-popups {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+}
+.score-popup {
+  position: absolute;
+  font-family: var(--font-arcade);
+  font-size: 10px;
+  font-weight: bold;
+  pointer-events: none;
+  animation: score-float 1s ease-out forwards;
+  text-shadow: 0 0 8px currentColor;
+}
+
+/* ============================================================
+   LEVEL ANNOUNCEMENT
+   ============================================================ */
+.level-announcement {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 300;
+}
+.level-announcement.hidden { display: none; }
+
+.level-text {
+  font-size: clamp(20px, 6vw, 36px);
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+  letter-spacing: 8px;
+  animation: level-appear 2s ease forwards;
+}
+
+/* ============================================================
+   OVERLAY BOX (Pause / Game Over / etc.)
+   ============================================================ */
+.overlay-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  background: rgba(10, 14, 39, 0.95);
+  border: 2px solid var(--cyan);
+  border-radius: 8px;
+  padding: 36px 40px;
+  box-shadow: var(--glow-cyan), inset 0 0 30px rgba(0,255,255,0.05);
+  max-width: 420px;
+  width: 90%;
+}
+
+.overlay-title {
+  font-size: clamp(16px, 4vw, 24px);
+  letter-spacing: 4px;
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+}
+
+.overlay-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ============================================================
+   GAME OVER SCREEN
+   ============================================================ */
+.gameover-title {
+  color: var(--red);
+  text-shadow: var(--glow-red);
+  animation: shake-title 0.5s ease;
+}
+
+.gameover-box { border-color: var(--red); box-shadow: var(--glow-red), inset 0 0 30px rgba(255,0,110,0.05); }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+.stat-item { text-align: center; }
+.stat-label {
+  font-size: 6px;
+  color: var(--grey);
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-size: 14px;
+  color: var(--white);
+}
+
+.new-record {
+  font-size: 10px;
+  color: var(--yellow);
+  text-shadow: var(--glow-yellow);
+  animation: new-record-pulse 0.6s ease-in-out infinite alternate;
+}
+.new-record.hidden { display: none; }
+
+/* ============================================================
+   VICTORY SCREEN
+   ============================================================ */
+.victory-title {
+  color: var(--green);
+  text-shadow: var(--glow-green);
+}
+
+/* ============================================================
+   SETTINGS SCREEN
+   ============================================================ */
+.settings-box { border-color: var(--purple); box-shadow: var(--glow-purple); }
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding-bottom: 12px;
+}
+
+.setting-label {
+  font-size: 8px;
+  color: var(--white);
+  letter-spacing: 2px;
+}
+
+.toggle-btn {
+  font-family: var(--font-arcade);
+  font-size: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--grey);
+  background: transparent;
+  color: var(--grey);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+  letter-spacing: 2px;
+  min-width: 60px;
+}
+.toggle-btn.active {
+  border-color: var(--green);
+  color: var(--green);
+  text-shadow: var(--glow-green);
+  box-shadow: 0 0 8px rgba(0,255,136,0.3);
+}
+
+.cycle-btn {
+  font-family: var(--font-arcade);
+  font-size: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--yellow);
+  background: transparent;
+  color: var(--yellow);
+  cursor: pointer;
+  border-radius: 3px;
+  letter-spacing: 2px;
+  text-shadow: var(--glow-yellow);
+}
+.cycle-btn:hover { background: rgba(255,190,11,0.1); }
+
+/* ============================================================
+   MOBILE CONTROLS
+   ============================================================ */
+.mobile-controls {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px 14px;
+  background: rgba(0,0,0,0.6);
+  border-top: 1px solid rgba(0,255,255,0.1);
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.mobile-btn {
+  font-family: var(--font-arcade);
+  font-size: 11px;
+  padding: 14px 22px;
+  border: 2px solid var(--grey);
+  background: rgba(0,0,0,0.5);
+  color: var(--white);
+  border-radius: 6px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.1s;
+  letter-spacing: 1px;
+  flex: 1;
+  text-align: center;
+}
+.mobile-btn:active {
+  background: rgba(0,255,255,0.15);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  transform: scale(0.95);
+}
+.mobile-btn-fire {
+  border-color: var(--red);
+  color: var(--red);
+  flex: 1.4;
+  font-size: 9px;
+}
+.mobile-btn-fire:active {
+  background: rgba(255,0,110,0.2);
+  border-color: var(--red);
+}

@@ -1,0 +1,116 @@
+/* ============================================================
+   SPACE INVADERS — ANIMATIONS.CSS
+   Keyframes and animation helpers
+   ============================================================ */
+
+/* ---- Twinkle (stars) ---- */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
+}
+
+/* ---- Blink (INSERT COIN) ---- */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ---- Pulse title (logo) ---- */
+@keyframes pulse-title {
+  0%, 100% { text-shadow: 0 0 8px #00ffff, 0 0 20px #00ffff80, 0 0 40px #00ffff40; }
+  50%       { text-shadow: 0 0 16px #00ffff, 0 0 40px #00ffff, 0 0 80px #00ffff80; }
+}
+
+/* ---- Score float ---- */
+@keyframes score-float {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%  { opacity: 1; transform: translateY(-40px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-70px) scale(0.8); }
+}
+
+/* ---- Level appear ---- */
+@keyframes level-appear {
+  0%   { opacity: 0; transform: scale(0.5) translateY(20px); letter-spacing: 30px; }
+  20%  { opacity: 1; transform: scale(1.1) translateY(0);    letter-spacing: 8px; }
+  70%  { opacity: 1; transform: scale(1) translateY(0);      letter-spacing: 8px; }
+  100% { opacity: 0; transform: scale(0.9) translateY(-20px); }
+}
+
+/* ---- Shake title (game over) ---- */
+@keyframes shake-title {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px) rotate(-2deg); }
+  40%       { transform: translateX(6px) rotate(2deg); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+/* ---- New record pulse ---- */
+@keyframes new-record-pulse {
+  0%   { text-shadow: 0 0 8px #ffbe0b, 0 0 20px #ffbe0b80; transform: scale(1); }
+  100% { text-shadow: 0 0 20px #ffbe0b, 0 0 40px #ffbe0b; transform: scale(1.05); }
+}
+
+/* ---- Player flash hit ---- */
+@keyframes player-hit-flash {
+  0%, 100% { opacity: 1; }
+  25%, 75%  { opacity: 0; }
+  50%       { opacity: 0.5; }
+}
+
+/* ---- Power-up notification ---- */
+@keyframes powerup-slide-in {
+  0%   { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Screen flash ---- */
+@keyframes screen-flash {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 0.3; }
+}
+
+/* ---- Enemy entry ---- */
+@keyframes enemy-entry {
+  0%   { opacity: 0; transform: translateY(-30px) scale(0.5); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---- Glow pulse on powerup icon ---- */
+@keyframes glow-pulse {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.8); }
+}
+
+/* ---- Victory sparkle ---- */
+@keyframes sparkle {
+  0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(2) rotate(360deg); opacity: 0; }
+}
+
+/* ---- Combo pop ---- */
+@keyframes combo-pop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  40%  { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ---- Invulnerability blink ---- */
+.player-invulnerable {
+  animation: player-hit-flash 0.15s linear infinite;
+}
+
+/* ---- Screen shake ---- */
+@keyframes screen-shake {
+  0%        { transform: translate(0, 0); }
+  10%, 50%  { transform: translate(-4px, -2px); }
+  20%, 60%  { transform: translate(4px, 2px); }
+  30%, 70%  { transform: translate(-3px, 1px); }
+  40%, 80%  { transform: translate(3px, -1px); }
+  90%       { transform: translate(-1px, 0); }
+  100%      { transform: translate(0, 0); }
+}
+
+.screen-shake {
+  animation: screen-shake 0.3s ease;
+}

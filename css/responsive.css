@@ -1,0 +1,69 @@
+/* ============================================================
+   SPACE INVADERS — RESPONSIVE.CSS
+   Media queries for tablet and mobile
+   ============================================================ */
+
+/* ---- Tablet (768px and below) ---- */
+@media (max-width: 768px) {
+  .logo-title { font-size: 36px; }
+  .overlay-box { padding: 24px 20px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hud-value { font-size: 12px; }
+
+  /* Show mobile controls on touch devices */
+  .mobile-controls { display: flex; }
+
+  /* Reduce HUD font sizes */
+  .hud { padding: 6px 12px; }
+  .hud-label { font-size: 5px; }
+  .hud-value { font-size: 10px; }
+  .life-icon { font-size: 11px; }
+  .hud-combo, .hud-powerup { font-size: 6px; }
+  .btn-pause { top: 42px; }
+}
+
+/* ---- Mobile landscape ---- */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-controls { padding: 6px 16px 8px; }
+  .mobile-btn { padding: 10px 16px; font-size: 9px; }
+  .hud { padding: 4px 10px; }
+}
+
+/* ---- Mobile portrait (small) ---- */
+@media (max-width: 480px) {
+  .logo-title { font-size: 26px; }
+  .logo-subtitle { font-size: 7px; letter-spacing: 5px; }
+  .logo-blink { font-size: 6px; }
+  .menu-best-score .value { font-size: 16px; }
+  .btn { font-size: 9px; padding: 12px 16px; }
+  .overlay-box { padding: 20px 16px; gap: 16px; }
+  .overlay-title { font-size: 16px; }
+  .stat-value { font-size: 12px; }
+  .stat-label { font-size: 5px; }
+  .menu-controls-hint { font-size: 6px; gap: 12px; }
+}
+
+/* ---- Force canvas to fill available space ---- */
+@media (max-width: 768px) {
+  #screen-game {
+    flex-direction: column;
+  }
+  #gameCanvas {
+    flex: 1;
+    width: 100% !important;
+    min-height: 0;
+  }
+}
+
+/* ---- Desktop: hide mobile controls ---- */
+@media (min-width: 769px) {
+  .mobile-controls { display: none !important; }
+}
+
+/* ---- Very tall screens: center canvas ---- */
+@media (min-aspect-ratio: 2/1) {
+  #gameCanvas {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}

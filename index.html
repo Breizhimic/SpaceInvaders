@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>SPACE INVADERS — ARCADE</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e27'/><rect x='14' y='2' width='4' height='4' fill='%2300ffff'/><rect x='10' y='6' width='12' height='4' fill='%2300ffff'/><rect x='6' y='10' width='20' height='4' fill='%2300ffff'/><rect x='2' y='14' width='28' height='4' fill='%2300ffff'/><rect x='6' y='18' width='4' height='4' fill='%2300ffff'/><rect x='22' y='18' width='4' height='4' fill='%2300ffff'/><rect x='10' y='22' width='4' height='4' fill='%239d4edd'/><rect x='18' y='22' width='4' height='4' fill='%239d4edd'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- ===================== SCREEN: MENU ===================== -->
+  <div id="screen-menu" class="screen active">
+    <div class="scanlines"></div>
+    <div class="stars" id="stars-menu"></div>
+    <div class="menu-container">
+      <div class="logo-wrapper">
+        <div class="logo-subtitle">ARCADE 1978</div>
+        <h1 class="logo-title">SPACE<br>INVADERS</h1>
+        <div class="logo-blink">▼ PRESS PLAY TO START ▼</div>
+      </div>
+      <div class="menu-best-score">
+        <span class="label">BEST SCORE</span>
+        <span class="value" id="menu-best-score">000000</span>
+      </div>
+      <div class="menu-buttons">
+        <button class="btn btn-primary" id="btn-play">▶ PLAY</button>
+        <button class="btn btn-secondary" id="btn-settings">⚙ SETTINGS</button>
+      </div>
+      <div class="menu-controls-hint">
+        <div class="hint-row"><span class="hint-key">← →</span><span>MOVE</span></div>
+        <div class="hint-row"><span class="hint-key">SPACE</span><span>FIRE</span></div>
+        <div class="hint-row"><span class="hint-key">P</span><span>PAUSE</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: GAME ===================== -->
+  <div id="screen-game" class="screen">
+    <div class="scanlines"></div>
+
+    <div class="hud hud-top">
+      <div class="hud-left">
+        <div class="hud-label">SCORE</div>
+        <div class="hud-value" id="hud-score">000000</div>
+      </div>
+      <div class="hud-center-top">
+        <div class="hud-label">LEVEL</div>
+        <div class="hud-value" id="hud-level">01</div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-label">BEST</div>
+        <div class="hud-value" id="hud-best">000000</div>
+      </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="hud hud-bottom">
+      <div class="hud-lives" id="hud-lives"></div>
+      <div class="hud-powerup" id="hud-powerup"></div>
+      <div class="hud-combo" id="hud-combo"></div>
+    </div>
+
+    <div class="mobile-controls" id="mobile-controls">
+      <button class="mobile-btn" id="btn-left">◀</button>
+      <button class="mobile-btn mobile-btn-fire" id="btn-fire">🔥 FIRE</button>
+      <button class="mobile-btn" id="btn-right">▶</button>
+    </div>
+
+    <button class="btn-pause" id="btn-pause">⏸</button>
+    <div id="score-popups"></div>
+    <div id="level-announcement" class="level-announcement hidden">
+      <div class="level-text">LEVEL <span id="level-num">1</span></div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: PAUSE ===================== -->
+  <div id="screen-pause" class="screen overlay-screen">
+    <div class="overlay-box">
+      <h2 class="overlay-title">PAUSED</h2>
+      <div class="overlay-buttons">
+        <button class="btn btn-primary" id="btn-resume">▶ RESUME</button>
+        <button class="btn btn-secondary" id="btn-restart-pause">↺ RESTART</button>
+        <button class="btn btn-secondary" id="btn-menu-pause">⌂ MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: GAME OVER ===================== -->
+  <div id="screen-gameover" class="screen overlay-screen">
+    <div class="scanlines"></div>
+    <div class="overlay-box gameover-box">
+      <h2 class="overlay-title gameover-title">GAME OVER</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-label">SCORE</div>
+          <div class="stat-value" id="go-score">000000</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">BEST</div>
+          <div class="stat-value" id="go-best">000000</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">LEVEL</div>
+          <div class="stat-value" id="go-level">01</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">KILLS</div>
+          <div class="stat-value" id="go-kills">000</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">ACCURACY</div>
+          <div class="stat-value" id="go-accuracy">0%</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">BEST COMBO</div>
+          <div class="stat-value" id="go-combo">x0</div>
+        </div>
+      </div>
+      <div id="new-record" class="new-record hidden">✦ NEW RECORD! ✦</div>
+      <div class="overlay-buttons">
+        <button class="btn btn-primary" id="btn-retry">↺ RETRY</button>
+        <button class="btn btn-secondary" id="btn-menu-go">⌂ MENU</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: SETTINGS ===================== -->
+  <div id="screen-settings" class="screen overlay-screen">
+    <div class="overlay-box settings-box">
+      <h2 class="overlay-title">SETTINGS</h2>
+      <div class="settings-grid">
+        <div class="setting-row">
+          <label class="setting-label">SOUND FX</label>
+          <button class="toggle-btn active" id="toggle-sound">ON</button>
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">MUSIC</label>
+          <button class="toggle-btn active" id="toggle-music">ON</button>
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">SCAN LINES</label>
+          <button class="toggle-btn active" id="toggle-scanlines">ON</button>
+        </div>
+        <div class="setting-row">
+          <label class="setting-label">DIFFICULTY</label>
+          <button class="cycle-btn" id="cycle-difficulty">NORMAL</button>
+        </div>
+      </div>
+      <div class="overlay-buttons">
+        <button class="btn btn-primary" id="btn-settings-back">← BACK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: LEVEL CLEAR ===================== -->
+  <div id="screen-victory" class="screen overlay-screen">
+    <div class="overlay-box">
+      <h2 class="overlay-title victory-title">LEVEL CLEAR!</h2>
+      <div class="stat-item" style="margin:20px 0">
+        <div class="stat-label">BONUS POINTS</div>
+        <div class="stat-value" id="victory-bonus" style="color:var(--yellow)">+500</div>
+      </div>
+      <div class="overlay-buttons">
+        <button class="btn btn-primary" id="btn-next-level">NEXT LEVEL ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/projectiles.js"></script>
+  <script src="js/powerups.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/enemies.js"></script>
+  <script src="js/collision.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
